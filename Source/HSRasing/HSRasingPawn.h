@@ -4,6 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "WheeledVehicle.h"
+#include "NiagaraSystem.h"
+#include "NiagaraFunctionLibrary.h" 
+#include "NiagaraComponent.h"
 #include "HSRasingPawn.generated.h"
 
 class UCameraComponent;
@@ -42,6 +45,12 @@ class AHSRasingPawn : public AWheeledVehicle
 	UPROPERTY(Category = Display, VisibleDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	UTextRenderComponent* InCarGear;
 
+	class UNiagaraComponent* SpeedLineBody;
+
+	UPROPERTY(Category = Display, VisibleDefaultsOnly, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	class UNiagaraComponent* BoostLineBody;
+
+
 	
 public:
 	AHSRasingPawn();
@@ -69,6 +78,11 @@ public:
 	/** Are we in reverse gear */
 	UPROPERTY(Category = Camera, VisibleDefaultsOnly, BlueprintReadOnly)
 	bool bInReverseGear;
+
+	UPROPERTY(BlueprintReadOnly)
+	float KPH = 0.0f;
+
+	int32 KPH_int = 0;
 
 	/** Initial offset of incar camera */
 	FVector InternalCameraOrigin;
@@ -98,6 +112,10 @@ public:
 	/** Handle handbrake released */
 	void OnHandbrakeReleased();
 	/** Switch between cameras */
+
+	void OnBoostPressed();
+	bool isBoost = false;
+
 	void OnToggleCamera();
 	/** Handle reset VR device */
 	void OnResetVR();

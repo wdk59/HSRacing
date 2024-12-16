@@ -14,6 +14,9 @@
 #include "UObject/ConstructorHelpers.h"
 #include "Components/TextRenderComponent.h"
 #include "Materials/Material.h"
+#include "NiagaraSystem.h"
+#include "NiagaraFunctionLibrary.h" 
+#include "NiagaraComponent.h"
 #include "GameFramework/Controller.h"
 
 #ifndef HMD_MODULE_INCLUDED
@@ -122,6 +125,31 @@ AHSRasingPawn::AHSRasingPawn()
 	GearDisplayColor = FColor(255, 255, 255, 255);
 
 	bInReverseGear = false;
+
+	SpeedLineBody = CreateDefaultSubobject<UNiagaraComponent>(TEXT("Speed Line Body"));
+	ConstructorHelpers::FObjectFinder<UNiagaraSystem> SpeedLineBodyAsset(TEXT("NiagaraSystem'/Game/Blueprints/Effect/NS_SpeedLines.NS_SpeedLines'"));
+	if (SpeedLineBodyAsset.Succeeded()) {
+		SpeedLineBody->SetAsset(SpeedLineBodyAsset.Object);
+		SpeedLineBody->SetupAttachment(GetMesh());
+	}
+	
+	SpeedLineBody->SetRelativeLocation(FVector(300.0f, 0.0f, 100.0f));
+	SpeedLineBody->SetRelativeRotation(FRotator(0.0f, 0.0f, 90.0f));
+	SpeedLineBody->SetRelativeScale3D(FVector(5.0f, 5.0f, 5.0f));
+
+	BoostLineBody = CreateDefaultSubobject<UNiagaraComponent>(TEXT("Boost Line Body"));
+	ConstructorHelpers::FObjectFinder<UNiagaraSystem> BoostLineBodyAsset(TEXT("NiagaraSystem'/Game/Blueprints/Effect/NS_BoostLines.NS_BoostLines'"));
+	if (BoostLineBodyAsset.Succeeded()) {
+		BoostLineBody->SetAsset(BoostLineBodyAsset.Object);
+		BoostLineBody->SetupAttachment(GetMesh());
+	}
+
+	BoostLineBody->SetRelativeLocation(FVector(280.0f, 0.0f, 160.0f));
+	BoostLineBody->SetRelativeRotation(FRotator(90.0f,0.0f, 0.0f));
+	BoostLineBody->SetRelativeScale3D(FVector(4.0f, 4.0f, 4.0f));
+
+
+	//NiagaraSystem'/Game/Blueprints/Effect/NS_BoostLines.NS_BoostLines'
 }
 
 void AHSRasingPawn::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
@@ -138,6 +166,8 @@ void AHSRasingPawn::SetupPlayerInputComponent(class UInputComponent* PlayerInput
 
 	PlayerInputComponent->BindAction("Handbrake", IE_Pressed, this, &AHSRasingPawn::OnHandbrakePressed);
 	PlayerInputComponent->BindAction("Handbrake", IE_Released, this, &AHSRasingPawn::OnHandbrakeReleased);
+	PlayerInputComponent->BindAction("Boost", IE_Pressed, this, &AHSRasingPawn::OnBoostPressed);
+
 	PlayerInputComponent->BindAction("SwitchCamera", IE_Pressed, this, &AHSRasingPawn::OnToggleCamera);
 
 	PlayerInputComponent->BindAction("ResetVR", IE_Pressed, this, &AHSRasingPawn::OnResetVR); 
@@ -162,6 +192,19 @@ void AHSRasingPawn::OnHandbrakeReleased()
 {
 	GetVehicleMovementComponent()->SetHandbrakeInput(false);
 }
+
+void AHSRasingPawn::OnBoostPressed()
+{
+	isBoost = !isBoost;
+	if (isBoost) {
+		SpeedLineBody->Deactivate();
+		BoostLineBody->Activate();
+	}
+	else {
+		BoostLineBody->Deactivate();
+	}
+}
+
 
 void AHSRasingPawn::OnToggleCamera()
 {
@@ -233,6 +276,8 @@ void AHSRasingPawn::BeginPlay()
 	bEnableInCar = UHeadMountedDisplayFunctionLibrary::IsHeadMountedDisplayEnabled();
 #endif // HMD_MODULE_INCLUDED
 	EnableIncarView(bEnableInCar,true);
+
+	BoostLineBody->Deactivate();
 }
 
 void AHSRasingPawn::OnResetVR()
@@ -249,8 +294,20 @@ void AHSRasingPawn::OnResetVR()
 
 void AHSRasingPawn::UpdateHUDStrings()
 {
-	float KPH = FMath::Abs(GetVehicleMovement()->GetForwardSpeed()) * 0.036f;
-	int32 KPH_int = FMath::FloorToInt(KPH);
+
+	//UpdateKPH
+	KPH = FMath::Abs(GetVehicleMovement()->GetForwardSpeed()) * 0.036f;
+	KPH_int = FMath::FloorToInt(KPH);
+
+	//KPH Niagara Effect
+	if (!isBoost) {
+		if (KPH_int >= 70) {
+			SpeedLineBody->Activate();
+		}
+		else {
+			SpeedLineBody->Deactivate();
+		}
+	}
 
 	// Using FText because this is display text that should be localizable
 	SpeedDisplayString = FText::Format(LOCTEXT("SpeedFormat", "{0} km/h"), FText::AsNumber(KPH_int));
