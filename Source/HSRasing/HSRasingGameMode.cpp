@@ -7,5 +7,5 @@
 AHSRasingGameMode::AHSRasingGameMode()
 {
 	DefaultPawnClass = AHSRasingPawn::StaticClass();
-	HUDClass = AHSRasingHud::StaticClass();
+	//HUDClass = AHSRasingHud::StaticClass();
 }
