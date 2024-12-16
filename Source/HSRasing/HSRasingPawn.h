@@ -113,11 +113,20 @@ public:
 	void OnHandbrakeReleased();
 	/** Switch between cameras */
 
-	void OnBoostPressed();
+	void OnBoostSwitch();
 	bool isBoost = false;
 	UPROPERTY(BlueprintReadOnly)
 	float boostValue = 0.0f;
 	void AddBoosterGauge();
+
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float boostGaningValue = 20.0f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float boostReducingValue = 0.1f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float boostLevel = 2.0f;
+	float boostTerm = 0.0f;
 
 	void OnToggleCamera();
 	/** Handle reset VR device */

@@ -166,7 +166,8 @@ void AHSRasingPawn::SetupPlayerInputComponent(class UInputComponent* PlayerInput
 
 	PlayerInputComponent->BindAction("Handbrake", IE_Pressed, this, &AHSRasingPawn::OnHandbrakePressed);
 	PlayerInputComponent->BindAction("Handbrake", IE_Released, this, &AHSRasingPawn::OnHandbrakeReleased);
-	PlayerInputComponent->BindAction("Boost", IE_Pressed, this, &AHSRasingPawn::OnBoostPressed);
+	PlayerInputComponent->BindAction("Boost", IE_Pressed, this, &AHSRasingPawn::OnBoostSwitch);
+	PlayerInputComponent->BindAction("Boost", IE_Released, this, &AHSRasingPawn::OnBoostSwitch);
 
 	PlayerInputComponent->BindAction("SwitchCamera", IE_Pressed, this, &AHSRasingPawn::OnToggleCamera);
 
@@ -193,7 +194,7 @@ void AHSRasingPawn::OnHandbrakeReleased()
 	GetVehicleMovementComponent()->SetHandbrakeInput(false);
 }
 
-void AHSRasingPawn::OnBoostPressed()
+void AHSRasingPawn::OnBoostSwitch()
 {
 	isBoost = !isBoost;
 	if (isBoost) {
@@ -206,7 +207,7 @@ void AHSRasingPawn::OnBoostPressed()
 }
 
 void AHSRasingPawn::AddBoosterGauge() {
-	boostValue += 20.f;
+	boostValue += boostGaningValue;
 }
 
 
@@ -267,6 +268,30 @@ void AHSRasingPawn::Tick(float Delta)
 			HeadRotation.Pitch += InputComponent->GetAxisValue(LookUpBinding);
 			HeadRotation.Yaw += InputComponent->GetAxisValue(LookRightBinding);
 			InternalCamera->SetRelativeRotation(HeadRotation);
+		}
+	}
+
+	/* Boost */
+	// Boost Term
+	boostTerm += Delta;
+	if (boostTerm > 0.5f) {
+
+		// Boost Speed
+		if (isBoost)
+			GetMesh()->AddForce(FVector(GetMesh()->GetComponentVelocity().X * boostLevel, GetMesh()->GetComponentVelocity().Y * boostLevel, GetMesh()->GetComponentVelocity().Z), NAME_None, true);
+		// Initialize Boost Term
+		boostTerm = 0.0f;
+	}
+
+	if (isBoost) {
+		
+
+
+		// Reduce Guage
+		boostValue -= boostReducingValue;
+		if (boostValue <= 0.0f) {
+			OnBoostSwitch();
+			boostValue = 0.0f;
 		}
 	}
 }
