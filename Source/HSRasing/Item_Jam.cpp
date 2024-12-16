@@ -7,7 +7,7 @@
 void AItem_Jam::PlayerPickedUp(AHSRasingPawn* Player)
 {
 	Super::PlayerPickedUp(Player);
-	//Player -> AddBoosterGauge();
+	Player->AddBoosterGauge();
 }
 
 void AItem_Jam::BeginPlay()
