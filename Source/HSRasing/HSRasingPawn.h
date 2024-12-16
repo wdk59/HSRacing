@@ -50,7 +50,8 @@ class AHSRasingPawn : public AWheeledVehicle
 	UPROPERTY(Category = Display, VisibleDefaultsOnly, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	class UNiagaraComponent* BoostLineBody;
 
-
+	UPROPERTY(Category = Display, VisibleDefaultsOnly, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	class UNiagaraComponent* EnergyLineBody;
 	
 public:
 	AHSRasingPawn();
@@ -114,6 +115,7 @@ public:
 	/** Switch between cameras */
 
 	void OnBoostPressed();
+	UPROPERTY(BlueprintReadOnly)
 	bool isBoost = false;
 
 	void OnToggleCamera();
