@@ -50,7 +50,8 @@ class AHSRasingPawn : public AWheeledVehicle
 	UPROPERTY(Category = Display, VisibleDefaultsOnly, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	class UNiagaraComponent* BoostLineBody;
 
-
+	UPROPERTY(Category = Display, VisibleDefaultsOnly, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	class UNiagaraComponent* EnergyLineBody;
 	
 public:
 	AHSRasingPawn();
