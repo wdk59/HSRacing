@@ -19,6 +19,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 		class USoundBase* PickupSound;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+		class UParticleSystem* PickupEffect;
+
 
 protected:
 	// Called when the game starts or when spawned

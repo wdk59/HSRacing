@@ -56,6 +56,10 @@ void AItem_Base::PlayerPickedUp(AHSRasingPawn* Player)
 		if (PickupSound) {
 			UGameplayStatics::SpawnSoundAtLocation(world, PickupSound, GetActorLocation());
 		}
+
+		if (PickupEffect) {
+			UGameplayStatics::SpawnEmitterAtLocation(world, PickupEffect, GetActorLocation());
+		}
 	}
 	
 	Destroy();

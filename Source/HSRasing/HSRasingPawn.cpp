@@ -133,7 +133,7 @@ AHSRasingPawn::AHSRasingPawn()
 		SpeedLineBody->SetupAttachment(GetMesh());
 	}
 	
-	SpeedLineBody->SetRelativeLocation(FVector(200.0f, 0.0f, 170.0f));
+	SpeedLineBody->SetRelativeLocation(FVector(300.0f, 0.0f, 100.0f));
 	SpeedLineBody->SetRelativeRotation(FRotator(0.0f, 0.0f, 90.0f));
 	SpeedLineBody->SetRelativeScale3D(FVector(5.0f, 5.0f, 5.0f));
 
@@ -146,7 +146,7 @@ AHSRasingPawn::AHSRasingPawn()
 
 	BoostLineBody->SetRelativeLocation(FVector(280.0f, 0.0f, 160.0f));
 	BoostLineBody->SetRelativeRotation(FRotator(90.0f,0.0f, 0.0f));
-	BoostLineBody->SetRelativeScale3D(FVector(5.0f, 5.0f, 5.0f));
+	BoostLineBody->SetRelativeScale3D(FVector(4.0f, 4.0f, 4.0f));
 
 
 	//NiagaraSystem'/Game/Blueprints/Effect/NS_BoostLines.NS_BoostLines'
