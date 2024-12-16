@@ -21,7 +21,7 @@ AItem_Base::AItem_Base()
 	RootComponent = CollisionComp;
 
 	MeshComp = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshComp"));
-	MeshComp->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepWorldTransform);
+	MeshComp->SetupAttachment(RootComponent);
 	MeshComp->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
 	RotationComp = CreateDefaultSubobject<URotatingMovementComponent>(TEXT("RotationComp"));
