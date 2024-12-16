@@ -115,6 +115,9 @@ public:
 
 	void OnBoostPressed();
 	bool isBoost = false;
+	UPROPERTY(BlueprintReadOnly)
+	float boostValue = 0.0f;
+	void AddBoosterGauge();
 
 	void OnToggleCamera();
 	/** Handle reset VR device */

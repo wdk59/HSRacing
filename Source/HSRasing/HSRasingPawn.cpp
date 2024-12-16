@@ -205,6 +205,10 @@ void AHSRasingPawn::OnBoostPressed()
 	}
 }
 
+void AHSRasingPawn::AddBoosterGauge() {
+	boostValue += 20.f;
+}
+
 
 void AHSRasingPawn::OnToggleCamera()
 {
