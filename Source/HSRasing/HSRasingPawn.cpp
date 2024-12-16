@@ -144,12 +144,21 @@ AHSRasingPawn::AHSRasingPawn()
 		BoostLineBody->SetupAttachment(GetMesh());
 	}
 
-	BoostLineBody->SetRelativeLocation(FVector(280.0f, 0.0f, 160.0f));
-	BoostLineBody->SetRelativeRotation(FRotator(90.0f,0.0f, 0.0f));
-	BoostLineBody->SetRelativeScale3D(FVector(4.0f, 4.0f, 4.0f));
+	BoostLineBody->SetRelativeLocation(FVector(0.0f, 0.0f, 0.0f));
+	BoostLineBody->SetRelativeRotation(FRotator(0.0f,0.0f, 0.0f));
+	BoostLineBody->SetRelativeScale3D(FVector(1.0f, 1.0f, 1.0f));
 
 
-	//NiagaraSystem'/Game/Blueprints/Effect/NS_BoostLines.NS_BoostLines'
+	EnergyLineBody = CreateDefaultSubobject<UNiagaraComponent>(TEXT("Energy Line Body"));
+	ConstructorHelpers::FObjectFinder<UNiagaraSystem> EnergyLineBodyAsset(TEXT("NiagaraSystem'/Game/Assets/RocketThrusterExhaustFX/FX/NS_RocketExhaust_Energy.NS_RocketExhaust_Energy'"));
+	if (EnergyLineBodyAsset.Succeeded()) {
+		EnergyLineBody->SetAsset(EnergyLineBodyAsset.Object);
+		EnergyLineBody->SetupAttachment(GetMesh());
+	}
+
+	EnergyLineBody->SetRelativeLocation(FVector(0.0f, 0.0f, 0.0f));
+	EnergyLineBody->SetRelativeRotation(FRotator(0.0f, 0.0f, 0.0f));
+	EnergyLineBody->SetRelativeScale3D(FVector(1.0f, 1.0f, 1.0f));
 }
 
 void AHSRasingPawn::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
@@ -199,9 +208,11 @@ void AHSRasingPawn::OnBoostPressed()
 	if (isBoost) {
 		SpeedLineBody->Deactivate();
 		BoostLineBody->Activate();
+		EnergyLineBody->Activate();
 	}
 	else {
 		BoostLineBody->Deactivate();
+		EnergyLineBody->Deactivate();
 	}
 }
 
@@ -278,6 +289,7 @@ void AHSRasingPawn::BeginPlay()
 	EnableIncarView(bEnableInCar,true);
 
 	BoostLineBody->Deactivate();
+	EnergyLineBody->Deactivate();
 }
 
 void AHSRasingPawn::OnResetVR()
