@@ -5,6 +5,7 @@
 #include "HSRasingWheelRear.h"
 #include "HSRasingHud.h"
 #include "Components/SkeletalMeshComponent.h"
+#include "Kismet/GameplayStatics.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
 #include "Components/InputComponent.h"
@@ -210,6 +211,13 @@ void AHSRasingPawn::OnBoostSwitch()
 		SpeedLineBody->Deactivate();
 		BoostLineBody->Activate();
 		EnergyLineBody->Activate();
+
+		UWorld* world = GetWorld();
+		if (world) {
+			if (BoostSound) {
+				UGameplayStatics::SpawnSoundAtLocation(world, BoostSound, GetActorLocation());
+			}
+		}
 	}
 	else {
 		BoostLineBody->Deactivate();

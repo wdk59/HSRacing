@@ -93,6 +93,9 @@ public:
 
 	// Begin Actor interface
 	virtual void Tick(float Delta) override;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+		class USoundBase* BoostSound;
 protected:
 	virtual void BeginPlay() override;
 
