@@ -115,6 +115,7 @@ public:
 	/** Switch between cameras */
 
 	void OnBoostSwitch();
+	UPROPERTY(BlueprintReadOnly)
 	bool isBoost = false;
 	UPROPERTY(BlueprintReadOnly)
 	float boostValue = 0.0f;
