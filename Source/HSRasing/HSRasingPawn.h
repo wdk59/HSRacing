@@ -93,6 +93,9 @@ public:
 
 	// Begin Actor interface
 	virtual void Tick(float Delta) override;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+		class USoundBase* BoostSound;
 protected:
 	virtual void BeginPlay() override;
 
@@ -115,6 +118,7 @@ public:
 	/** Switch between cameras */
 
 	void OnBoostSwitch();
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool isBoost = false;
 	UPROPERTY(BlueprintReadOnly)
 	float boostValue = 0.0f;
